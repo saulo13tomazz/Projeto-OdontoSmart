@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoSmart - Entrar</title>
+  <link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/components.css">
+</head>
+<body class="login">
+  <div class="login-box">
+    <h1>OdontoSmart</h1>
+    <p class="sub">Passo 0 · Escolha a equipe (INE) e o perfil. Toda a produção alimenta a meta da equipe selecionada.</p>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="form-group"><label for="sel-ine">Equipe / INE</label><select id="sel-ine" class="form-control"></select></div>
+      <div class="form-group"><label for="sel-perfil">Perfil</label>
+        <select id="sel-perfil" class="form-control"><option value="CD">Cirurgião-Dentista</option><option value="TSB">Técnico em Saúde Bucal (TSB)</option></select></div>
+      <div class="form-group"><label for="sel-prof">Profissional</label><select id="sel-prof" class="form-control"></select></div>
+    </div>
+    <div id="login-aviso"></div>
+    <button id="btn-entrar" class="btn btn-primary" style="width:100%">Entrar</button>
+  </div>
+  <script src="js/util.js"></script><script src="js/seed.js"></script><script src="js/store.js"></script>
+  <script src="js/pages/login.js"></script>
+</body>
+</html>

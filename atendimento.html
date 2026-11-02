@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoSmart - Atendimento</title>
+  <link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/atendimento.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <div class="container">
+    <aside id="app-menu"></aside>
+    <main>
+      <h2 class="page-title">Atendimento & Evolução SOAP</h2>
+      <p class="page-subtitle">Busque o paciente, abra o caso clínico e registre a evolução. Os indicadores da Série B são apurados automaticamente a partir do que for registrado.</p>
+
+      <!-- 1. Busca -->
+      <div class="card" id="bloco-busca">
+        <div class="card-header">1. Busca Rápida e Identificação do Paciente</div>
+        <div class="form-grid">
+          <div class="form-group span-2"><label for="busca-termo">Digite CPF, CNS, NIS ou Nome:</label><input id="busca-termo" class="form-control" type="search" autocomplete="off"></div>
+          <div class="form-group" style="justify-content:flex-end"><button id="btn-buscar" class="btn btn-primary">🔍 Buscar na base local</button></div>
+        </div>
+        <div id="busca-resultado"></div>
+      </div>
+
+      <!-- Cadastro (find-or-create) -->
+      <div class="card" id="bloco-cadastro" hidden>
+        <div class="card-header"><span>Cadastrar novo paciente</span><button id="cad-cancelar" class="btn btn-secondary btn-sm" type="button">Cancelar</button></div>
+        <div class="form-grid">
+          <div class="form-group span-2"><label for="cad-nome">Nome completo *</label><input id="cad-nome" class="form-control" autocomplete="off"></div>
+          <div class="form-group"><label for="cad-nasc">Data de nascimento *</label><input id="cad-nasc" class="form-control" type="date"></div>
+          <div class="form-group"><label for="cad-sexo">Sexo</label><select id="cad-sexo" class="form-control"><option value="">Não informado</option><option value="F">Feminino</option><option value="M">Masculino</option></select></div>
+          <div class="form-group"><label for="cad-cpf">CPF</label><input id="cad-cpf" class="form-control" inputmode="numeric" placeholder="somente números"></div>
+          <div class="form-group"><label for="cad-cns">CNS</label><input id="cad-cns" class="form-control" inputmode="numeric" placeholder="15 dígitos"></div>
+          <div class="form-group"><label for="cad-nis">NIS</label><input id="cad-nis" class="form-control" inputmode="numeric"></div>
+          <div class="form-group"><label for="cad-mae">Nome da mãe</label><input id="cad-mae" class="form-control"></div>
+          <div class="form-group"><label for="cad-tel">Telefone</label><input id="cad-tel" class="form-control" inputmode="tel"></div>
+          <div class="form-group"><label>Marcadores de risco</label>
+            <label style="font-weight:normal"><input type="checkbox" id="cad-ges"> Gestante</label>
+            <label style="font-weight:normal"><input type="checkbox" id="cad-dia"> Diabético</label>
+            <span class="hint">Crianças de 6 a 12 anos são identificadas automaticamente (B4).</span></div>
+        </div>
+        <div id="cad-erro"></div>
+        <button id="cad-salvar" class="btn btn-success" type="button">Salvar cadastro e selecionar paciente</button>
+      </div>
+
+      <!-- 2. Validação de perfil -->
+      <div id="bloco-paciente" hidden></div>
+
+      <!-- 3 e 4. Caso clínico, procedimentos, SOAP -->
+      <div id="bloco-trabalho" hidden></div>
+      <div id="bloco-final" hidden></div>
+    </main>
+  </div>
+  <div id="app-footer"></div>
+  <script src="js/util.js"></script><script src="js/seed.js"></script><script src="js/store.js"></script>
+  <script src="js/indicadores.js"></script><script src="js/alertas.js"></script><script src="js/layout.js"></script><script src="js/componentes.js"></script>
+  <script src="js/pages/atendimento.js"></script>
+</body>
+</html>
