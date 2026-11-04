@@ -2,13 +2,13 @@
 (function () {
   const OS = window.OS;
   const MENU = [
-    ['dashboard', 'dashboard.html', '1. Dashboard & Indicadores'],
-    ['pacientes', 'pacientes.html', '2. Pacientes'],
-    ['lembretes', 'lembretes.html', '3. Central de Lembretes'],
-    ['atendimento', 'atendimento.html', '4. Atendimento & SOAP'],
-    ['coletiva', 'acao-coletiva.html', '5. Ação Coletiva (PSE)'],
-    ['relatorios', 'relatorios.html', '6. Relatórios & Busca Ativa'],
-    ['config', 'configuracoes.html', '7. Configurações']
+    ['dashboard', 'dashboard.html', 'Dashboard & Indicadores'],
+    ['pacientes', 'pacientes.html', 'Pacientes'],
+    ['lembretes', 'lembretes.html', 'Central de Lembretes'],
+    ['atendimento', 'atendimento.html', 'Atendimento & SOAP'],
+    ['coletiva', 'acao-coletiva.html', 'Ação Coletiva (PSE)'],
+    ['relatorios', 'relatorios.html', 'Relatórios & Busca Ativa'],
+    ['config', 'configuracoes.html', 'Configurações']
   ];
 
   /* Chame no início de cada página interna. Devolve o profissional logado (ou redireciona ao login). */
@@ -26,7 +26,8 @@
         </div>
       </header>`;
     OS.qs('#app-menu').innerHTML = `<div class="menu-title">Menu de Navegação</div><ul>` +
-      MENU.map(([k, href, nome]) => `<li><a href="${href}" ${k === chave ? 'class="active" aria-current="page"' : ''}>${nome}</a></li>`).join('') + '</ul>';
+      MENU.map(([k, href, nome]) => `<li><button type="button" class="nav-btn${k === chave ? ' active' : ''}" ${k === chave ? 'aria-current="page"' : ''} data-href="${href}">${nome}</button></li>`).join('') + '</ul>';
+    OS.qsa('#app-menu .nav-btn').forEach((btn) => btn.addEventListener('click', () => { location.href = btn.dataset.href; }));
     OS.qs('#app-footer').innerHTML = '<footer>OdontoSmart © 2026 - Gestão de Indicadores de Saúde Bucal</footer>';
     OS.qs('#trocar-perfil').addEventListener('click', () => OS.sessao.limpar());
     return u;
