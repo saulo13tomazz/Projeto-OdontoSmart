@@ -10,14 +10,15 @@
   <div class="container">
     <aside id="app-menu"></aside>
     <main>
-      <h2 class="page-title">Dashboard do Odontólogo & Indicadores (Série B)</h2>
-      <p class="page-subtitle" id="dash-sub"></p>
-
-      <div class="alert-box alert-info"><span>💡</span><div><strong>OdontoSmart:</strong> monitoramento em tempo real, calculado a partir dos atendimentos registrados, para evitar perdas de financiamento e garantir altas e procedimentos preventivos na Atenção Primária.</div></div>
-
-      <div class="toolbar">
-        <div class="form-group"><label for="f-periodo">Período</label><select id="f-periodo" class="form-control"></select></div>
-        <div class="form-group"><label for="f-prof">Profissional</label><select id="f-prof" class="form-control"></select></div>
+      <div class="dash-top">
+        <div>
+          <h2 class="page-title">Indicadores de Saúde Bucal (Série B)</h2>
+          <p class="page-subtitle" id="dash-sub"></p>
+        </div>
+        <div class="toolbar" style="margin-bottom:0">
+          <div class="form-group"><label for="f-periodo">Período</label><select id="f-periodo" class="form-control"></select></div>
+          <div class="form-group"><label for="f-prof">Profissional</label><select id="f-prof" class="form-control"></select></div>
+        </div>
       </div>
 
       <div id="dash-score"></div>
@@ -30,4 +31,3 @@
   <script src="../js/pages/dashboard.js"></script>
 </body>
 </html>
-

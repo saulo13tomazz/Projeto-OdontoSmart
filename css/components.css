@@ -1,6 +1,9 @@
 /* ===== Componentes reutilizáveis ===== */
 .card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  background: rgba(255, 255, 255, .93);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(230, 234, 240, .9); border-radius: var(--radius);
   padding: 22px; margin-bottom: 20px; box-shadow: var(--shadow);
 }
 .card-header {
@@ -12,22 +15,68 @@
 .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 18px; }
 .toolbar .form-group { min-width: 200px; }
 
-/* ---------- Indicadores ---------- */
-.indicators-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-top: 20px; }
+/* ---------- Indicadores (Dashboard enxuto & cards clicáveis) ---------- */
+.dash-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
+.dash-top .page-subtitle { margin-bottom: 0; }
+.indicators-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; margin-top: 20px; }
 .indicator-card {
   position: relative; overflow: hidden;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  background: rgba(255, 255, 255, .94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(230, 234, 240, .95); border-radius: var(--radius);
   padding: 20px; box-shadow: var(--shadow);
-  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
 }
 .indicator-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--brand-500), var(--accent)); }
 .indicator-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-.indicator-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.indicator-card-link {
+  display: flex; flex-direction: column; text-decoration: none; color: inherit; cursor: pointer;
+}
+.indicator-card-link:hover { text-decoration: none; border-color: var(--brand-400); }
+.indicator-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
 .indicator-code {
   display: inline-block; font-weight: 800; font-size: 11.5px; letter-spacing: .4px;
   padding: 4px 9px; border-radius: 7px; color: var(--brand-700); background: var(--brand-50); border: 1px solid var(--brand-100);
 }
-.indicator-title { font-weight: 700; font-size: 15px; color: var(--ink-900); margin-top: 8px; line-height: 1.3; }
+.indicator-title { font-weight: 700; font-size: 15px; color: var(--ink-900); line-height: 1.3; min-height: 39px; }
+.indicator-simple-value { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.indicator-big-pct { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--ink-900); line-height: 1; }
+.indicator-fraction { font-size: 12.5px; font-weight: 600; color: var(--ink-500); }
+.indicator-cta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--ink-100);
+  font-size: 12.5px; font-weight: 600; color: var(--brand-600);
+}
+.indicator-card-link:hover .indicator-cta { color: var(--brand-700); }
+
+/* ---------- Página de Detalhes do Indicador ---------- */
+.detail-topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+.ind-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.ind-tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink-700); font-size: 12.5px; cursor: pointer;
+  transition: all .18s var(--ease);
+}
+.ind-tab span { color: var(--ink-500); font-size: 11.5px; }
+.ind-tab:hover { border-color: var(--brand-400); color: var(--ink-900); }
+.ind-tab.active {
+  background: linear-gradient(135deg, var(--brand-500), var(--accent));
+  color: #fff; border-color: transparent; box-shadow: 0 4px 12px rgba(6, 182, 212, .25);
+}
+.ind-tab.active span { color: rgba(255, 255, 255, .85); }
+.detail-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+.detail-hero-number { text-align: right; background: var(--ink-50); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 20px; min-width: 210px; }
+.detail-big-pct { font-size: 36px; font-weight: 800; letter-spacing: -1.2px; color: var(--ink-900); line-height: 1; }
+.detail-fraction { font-size: 13px; color: var(--ink-700); margin-top: 6px; }
+.detail-meta { font-size: 12px; color: var(--ink-500); margin-top: 2px; }
+.detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; }
+.formula-list { display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; }
+.formula-list strong { display: block; color: var(--ink-900); font-size: 12.5px; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 2px; }
+.formula-list p { color: var(--ink-700); }
+.row-current td { background: var(--brand-50); }
 
 /* ---------- Badges ---------- */
 .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap; }
@@ -55,17 +104,23 @@
 
 /* ---------- Pontuação ---------- */
 .score-box {
-  display: flex; gap: 28px; flex-wrap: wrap; align-items: center;
-  background: linear-gradient(135deg, var(--ink-900), #1e1b4b);
-  color: #cbd5e1; border-radius: var(--radius); padding: 22px 26px; margin-top: 16px;
+  display: flex; gap: 28px; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, .88) 0%, rgba(14, 116, 144, .82) 100%),
+    url('../assets/bg-clinica.jpg') center / cover no-repeat;
+  color: #cbd5e1; border-radius: var(--radius); padding: 20px 26px; margin-top: 8px;
   box-shadow: var(--shadow-lg);
 }
 .score-box .big {
-  font-size: 44px; font-weight: 800; letter-spacing: -1.5px; line-height: 1;
+  font-size: 42px; font-weight: 800; letter-spacing: -1.5px; line-height: 1;
   background: linear-gradient(135deg, var(--brand-400), #a5b4fc); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.score-box small { display: block; color: #94a3b8; font-size: 12px; margin-top: 6px; }
-.score-box > div[style] { color: #cbd5e1 !important; }
+.score-box small { display: block; color: #94a3b8; font-size: 12px; margin-top: 2px; }
+.score-main { display: flex; align-items: center; gap: 16px; }
+.score-main strong { color: #fff; font-size: 14.5px; display: block; }
+.score-kpis { display: flex; gap: 28px; flex-wrap: wrap; }
+.score-kpis > div { border-left: 1px solid rgba(148, 163, 184, .2); padding-left: 20px; }
+.score-kpis strong { color: #fff; font-size: 16px; display: block; }
 
 /* ---------- Alertas ---------- */
 .alert-box { padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 13.5px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid transparent; border-left-width: 4px; }

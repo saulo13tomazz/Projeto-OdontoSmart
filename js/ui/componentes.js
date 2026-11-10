@@ -10,19 +10,25 @@
     return h;
   };
 
-  /* Card de indicador (dashboard) */
-  OS.cardIndicador = (r) => {
-    const cls = r.nivel === 'otimo' ? 'ok' : r.nivel === 'suficiente' || r.nivel === 'regular' ? 'warn' : '';
-    const msg = r.nivel === 'semdados' ? 'Sem dados no período para este indicador.' : r.msg;
-    return `<div class="indicator-card">
+  /* Card resumido e clicável de indicador (dashboard) */
+  OS.cardIndicador = (r, qs) => {
+    const href = `indicador.html?cod=${encodeURIComponent(r.cod)}${qs ? '&' + qs : ''}`;
+    const pctTxt = r.den === 0 ? '—' : OS.fmtPct(r.pct);
+    return `<a class="indicator-card indicator-card-link" href="${href}" aria-label="Ver detalhes do indicador ${r.cod} - ${OS.esc(r.nome)}">
       <div class="indicator-header">
-        <div><span class="indicator-code">${r.cod}</span><div class="indicator-title">${OS.esc(r.nome)}</div></div>
+        <span class="indicator-code">${r.cod}</span>
         ${OS.badge(r.nivel)}
       </div>
-      <div class="metric-details"><span>${r.detalhe}</span><span>${OS.esc(r.metaTxt)}</span></div>
-      <div class="progress-container" role="progressbar" aria-valuenow="${Math.round(Math.min(100, r.prog))}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar ${r.cor}" style="width:${Math.max(0, Math.min(100, r.prog))}%"></div></div>
-      <div class="goal-banner ${cls}">${msg}</div>
-    </div>`;
+      <div class="indicator-title">${OS.esc(r.nome)}</div>
+      <div class="indicator-simple-value">
+        <span class="indicator-big-pct">${pctTxt}</span>
+        <span class="indicator-fraction">${r.num} / ${r.den}</span>
+      </div>
+      <div class="progress-container" role="progressbar" aria-valuenow="${Math.round(Math.min(100, r.prog))}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar ${r.cor}" style="width:${Math.max(0, Math.min(100, r.prog))}%"></div>
+      </div>
+      <div class="indicator-cta"><span>Ver detalhes</span><span aria-hidden="true">→</span></div>
+    </a>`;
   };
 
   /* Odontograma permanente (FDI). estado: {dente:{status:'feito'|'planejado'|'hoje', rot}} */
