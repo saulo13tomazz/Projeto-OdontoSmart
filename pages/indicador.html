@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoSmart - Detalhes do Indicador</title>
+  <link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <div class="container">
+    <aside id="app-menu"></aside>
+    <main>
+      <div class="detail-topbar">
+        <a id="btn-voltar" class="btn btn-secondary btn-sm" href="dashboard.html">← Voltar ao Dashboard</a>
+        <div class="ind-tabs" id="ind-tabs" role="tablist" aria-label="Alternar indicador"></div>
+      </div>
+
+      <div class="toolbar detail-filters">
+        <div class="form-group"><label for="f-periodo">Período</label><select id="f-periodo" class="form-control"></select></div>
+        <div class="form-group"><label for="f-prof">Profissional</label><select id="f-prof" class="form-control"></select></div>
+      </div>
+
+      <div id="ind-hero"></div>
+      <div class="detail-grid" id="ind-info"></div>
+      <div id="ind-registros"></div>
+    </main>
+  </div>
+  <div id="app-footer"></div>
+  <script src="../js/core/util.js"></script><script src="../js/core/seed.js"></script><script src="../js/core/store.js"></script>
+  <script src="../js/services/indicadores.js"></script><script src="../js/ui/layout.js"></script><script src="../js/ui/componentes.js"></script>
+  <script src="../js/pages/indicador.js"></script>
+</body>
+</html>

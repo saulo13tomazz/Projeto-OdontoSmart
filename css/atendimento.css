@@ -1,0 +1,41 @@
+/* ===== Estilos da tela de atendimento / odontograma ===== */
+.odontogram-grid { margin: 16px 0; padding: 16px; background: var(--ink-50); border: 1px solid var(--border); border-radius: var(--radius); overflow-x: auto; }
+.odonto-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 8px; min-width: max-content; }
+.odonto-row .gap { width: 16px; border-left: 2px dashed #d5dbe4; margin-left: 4px; }
+.tooth-box {
+  width: 44px; height: 54px; border: 1px solid #d5dbe4; border-radius: 10px 10px 14px 14px;
+  text-align: center; font-size: 11.5px; padding-top: 6px; background: var(--surface);
+  font-weight: 700; cursor: pointer; color: var(--ink-700); box-shadow: var(--shadow-sm);
+  transition: transform .15s var(--ease), border-color .15s, box-shadow .15s;
+}
+.tooth-box small { display: block; font-weight: 600; font-size: 9px; line-height: 1.1; margin-top: 3px; }
+.tooth-box:hover { border-color: var(--brand-500); transform: translateY(-2px); box-shadow: var(--shadow); }
+.tooth-treated { background: #dcfce7; border-color: #4ade80; color: #15803d; }
+.tooth-pending { background: #fef3c7; border-color: #fbbf24; color: #b45309; }
+.tooth-today { background: #dbeafe; border-color: #60a5fa; color: #1d4ed8; }
+.tooth-selected { box-shadow: 0 0 0 3px rgba(6, 182, 212, .5); border-color: var(--brand-500); }
+.odonto-legend { font-size: 11.5px; color: var(--ink-500); display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+
+.patient-context-banner {
+  background: linear-gradient(135deg, var(--brand-50), #eef2ff);
+  border: 1px solid var(--brand-100); border-radius: var(--radius);
+  padding: 16px 20px; margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.patient-context-info h3 { font-size: 16px; color: var(--ink-900); margin-bottom: 4px; letter-spacing: -.2px; }
+.patient-context-info p { font-size: 13px; color: var(--ink-700); }
+
+.search-results { margin-top: 12px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.search-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--ink-100); font-size: 13px; flex-wrap: wrap; transition: background .15s; }
+.search-item:hover { background: var(--ink-50); }
+.search-item:last-child { border-bottom: none; }
+
+.allocation-summary-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 16px 20px; margin-top: 16px; }
+.allocation-summary-box h4 { color: #166534; font-size: 14px; margin-bottom: 8px; }
+.allocation-tags-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.alloc-tag { background: linear-gradient(135deg, var(--brand-500), var(--brand-700)); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; }
+.alloc-tag.off { background: var(--ink-100); color: var(--ink-400); }
+
+.plan-list { list-style: none; margin: 10px 0; }
+.plan-list li { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--ink-100); font-size: 13px; flex-wrap: wrap; }
+.soap-box { font-size: 13px; background: var(--surface); padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-top: 6px; display: grid; gap: 4px; }
