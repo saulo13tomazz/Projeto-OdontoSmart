@@ -8,5 +8,5 @@
     OS.qs('#login-aviso').innerHTML = lista.length ? '' : '<div class="alert-box alert-warning">Nenhum profissional com este perfil nesta equipe. Escolha outra combinação.</div>';
   }
   ineSel.addEventListener('change', profs); perfSel.addEventListener('change', profs); profs();
-  btn.addEventListener('click', () => { OS.sessao.set(profSel.value); OS.logAcesso('login'); location.href = 'dashboard.html'; });
+  btn.addEventListener('click', () => { OS.sessao.set(profSel.value); OS.logAcesso('login'); OS.navegar('dashboard.html'); });
 })();
