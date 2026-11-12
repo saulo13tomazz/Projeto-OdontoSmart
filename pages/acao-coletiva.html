@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoSmart - Ação Coletiva</title>
+  <link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div id="app-header"></div>
+  <div class="container">
+    <aside id="app-menu"></aside>
+    <main>
+      <h2 class="page-title">Ação Coletiva & Prevenção (PSE)</h2>
+      <p class="page-subtitle">Registro rápido de escovação supervisionada. Alimenta o indicador B4 sem poluir a lista de casos clínicos individuais. Pode ser registrado por Dentista ou TSB.</p>
+      <div id="col-b4"></div>
+
+      <div class="card">
+        <div class="card-header">Nova atividade coletiva</div>
+        <div class="form-grid">
+          <div class="form-group"><label for="c-data">Data</label><input type="date" id="c-data" class="form-control"></div>
+          <div class="form-group span-2"><label for="c-local">Local (escola, creche, praça...)</label><input id="c-local" class="form-control"></div>
+          <div class="form-group"><label for="c-tipo">Atividade</label><select id="c-tipo" class="form-control"><option value="escovacao">Escovação supervisionada</option><option value="outra">Outra ação educativa (não conta no B4)</option></select></div>
+        </div>
+        <div class="toolbar">
+          <div class="form-group" style="flex:1"><label for="c-busca">Participantes (crianças de 6 a 12 anos vinculadas à equipe)</label><input id="c-busca" type="search" class="form-control" placeholder="Filtrar por nome"></div>
+          <button class="btn btn-secondary" id="c-todos" type="button">Marcar todas as exibidas</button>
+          <button class="btn btn-secondary" id="c-limpar" type="button">Limpar seleção</button>
+        </div>
+        <p id="c-contagem" style="font-size:13px;color:#475569;margin-bottom:8px"></p>
+        <div id="c-lista" class="table-scroll" style="max-height:320px;overflow-y:auto;border:1px solid #e2e8f0;border-radius:6px"></div>
+        <div id="c-erro" style="margin-top:12px"></div>
+        <button class="btn btn-success" id="c-salvar" type="button" style="margin-top:12px">Registrar atividade</button>
+      </div>
+
+      <div class="card"><div class="card-header">Atividades registradas</div><div id="c-hist"></div></div>
+    </main>
+  </div>
+  <div id="app-footer"></div>
+  <script src="../js/core/util.js"></script><script src="../js/core/seed.js"></script><script src="../js/core/store.js"></script>
+  <script src="../js/services/indicadores.js"></script><script src="../js/ui/layout.js"></script><script src="../js/ui/componentes.js"></script>
+  <script src="../js/pages/acao-coletiva.js"></script>
+</body>
+</html>
+
