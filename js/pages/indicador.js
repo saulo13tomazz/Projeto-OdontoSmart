@@ -1,8 +1,12 @@
-/* ===== Página de detalhes de um indicador (B1 a B6) ===== */
+/* ===== Página de detalhes de um indicador (B1 a B6) =====
+   O "microscópio" do Dashboard: explica como a conta funciona, mostra a régua
+   da Nota Técnica 30/2025 e lista paciente por paciente que entrou no cálculo. */
 (function () {
+  // Inicia com 'dashboard' destacado no menu lateral (essa tela é filha dele!)
   const OS = window.OS, U = OS.iniciarPagina('dashboard');
   if (!U) return;
 
+  // Ficha técnica com tradução simples de numerador, denominador e dicas práticas de cada indicador
   const FICHA = {
     B1: {
       numerador: 'Cidadãos com 1ª Consulta Odontológica Programada registrada no período (1 vez a cada 12 meses por pessoa).',
@@ -57,6 +61,7 @@
     }
   };
 
+  // Prepara os filtros e lê da URL qual indicador (?cod=B2...) e período o usuário clicou
   const per = OS.qs('#f-periodo'), prof = OS.qs('#f-prof');
   per.innerHTML = Object.entries(OS.periodos).map(([k, v]) => `<option value="${k}">${v.nome}</option>`).join('');
   prof.innerHTML = '<option value="">Toda a equipe (INE)</option>' + OS.db.profissionais.filter((p) => p.ine === U.ine)
@@ -68,6 +73,7 @@
   if (qp.get('periodo') && OS.periodos[qp.get('periodo')]) per.value = qp.get('periodo');
   if (qp.get('prof')) prof.value = qp.get('prof');
 
+  // Monta a tabelinha da régua de conceitos (mostrando em qual degrau a equipe está pisando)
   function reguaConceitos(ind) {
     const m = ind.meta, P = OS.db.config.pontos;
     if (m.tipo === 'info') {
@@ -105,6 +111,7 @@
     <p style="font-size:12px;color:var(--ink-500);margin-top:10px">Peso deste indicador na média da equipe: <strong>${m.peso}</strong> (ajustável em <a href="configuracoes.html">Configurações</a>).</p>`;
   }
 
+  // Busca e formata os registros nominais (atendimentos, altas, exos, escolas...) que geraram o número
   function registrosDoIndicador(cod, j) {
     const ats = OS.db.atendimentos.filter((a) => a.ine === U.ine && a.data >= j.ini && a.data <= j.fim && (!prof.value || a.profId === prof.value))
       .sort((a, b) => b.data.localeCompare(a.data));
@@ -188,15 +195,17 @@
         }).join('') + `</tbody></table></div>` : '<div class="empty">Nenhuma restauração ART registrada no período.</div>') + `</div>`;
   }
 
+  // Renderiza o painel completo do indicador escolhido + abas rápidas para trocar de B1..B6 sem voltar
   function desenhar() {
     const r = OS.calcular({ ine: U.ine, periodo: per.value, profId: prof.value });
     const ind = r.ind.find((x) => x.cod === codAtual) || r.ind[0];
     const f = FICHA[ind.cod];
     const qsFiltro = new URLSearchParams({ periodo: per.value, ...(prof.value ? { prof: prof.value } : {}) }).toString();
 
+    // Mantém os filtros vivos quando clicar em "Voltar para o Dashboard"
     OS.qs('#btn-voltar').href = `dashboard.html?${qsFiltro}`;
 
-    // Abas rápidas B1..B6
+    // Abas rápidas B1..B6 (troca o indicador na hora e atualiza a URL sem recarregar a página)
     OS.qs('#ind-tabs').innerHTML = r.ind.map((i) => `<button type="button" class="ind-tab ${i.cod === ind.cod ? 'active' : ''}" data-cod="${i.cod}">
       <strong>${i.cod}</strong><span>${OS.fmtPct(i.pct)}</span>
     </button>`).join('');

@@ -1,10 +1,16 @@
+// ============================================================================
+// CONTROLADOR DE ATENDIMENTO CLÍNICO & SOAP
+// A estrela do consultório! Conduz a consulta do início ao fim:
+// busca/cadastra paciente -> confere risco -> odontograma + plano -> SOAP -> alertas -> salva!
+// ============================================================================
 (function () {
   const OS = window.OS, U = OS.iniciarPagina('atendimento');
   if (!U) return;
   const $ = (s) => OS.qs(s);
+  // Estado vivo da consulta atual (guarda paciente, dente clicado, procedimentos do dia e textos do SOAP)
   const S = { pac: null, caso: null, procs: [], planoNovo: [], ignorados: new Set(), dente: '', soap: { s: '', o: '', a: '', p: '' }, conduta: 'continuidade', retorno: OS.addDias(OS.hoje(), 14) };
 
-  /* ---------- Passo 1: busca ---------- */
+  /* ---------- Passo 1: busca na recepção ---------- */
   function buscar() {
     const termo = $('#busca-termo').value, alvo = $('#busca-resultado');
     if (!termo.trim()) { alvo.innerHTML = ''; return; }
@@ -20,7 +26,7 @@
   $('#btn-buscar').addEventListener('click', buscar);
   $('#busca-termo').addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
 
-  /* ---------- Cadastro ---------- */
+  /* ---------- Cadastro rápido (quando o paciente ainda não tem ficha) ---------- */
   function abrirCadastro(termo) {
     $('#bloco-cadastro').hidden = false;
     const d = OS.digitos(termo);
@@ -44,7 +50,7 @@
     selecionar(r.paciente);
   });
 
-  /* ---------- Passo 2: validação de perfil ---------- */
+  /* ---------- Passo 2: validação de perfil (gestante/diabético ainda valem?) ---------- */
   function selecionar(p) {
     Object.assign(S, { pac: p, caso: null, procs: [], planoNovo: [], ignorados: new Set(), dente: '', soap: { s: '', o: '', a: '', p: '' }, conduta: 'continuidade', retorno: OS.addDias(OS.hoje(), 14) });
     $('#bloco-trabalho').hidden = true; $('#bloco-final').hidden = true;
@@ -70,7 +76,7 @@
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
-  /* ---------- Passo 3 e 4: caso clínico + evolução ---------- */
+  /* ---------- Passo 3 e 4: caso clínico + odontograma + evolução SOAP ---------- */
   function iniciar() {
     S.caso = OS.casoAtivo(S.pac.id);
     $('#bloco-paciente').hidden = true; $('#bloco-trabalho').hidden = false;
@@ -78,10 +84,11 @@
   }
   const nomeItem = (i) => `${OS.esc((OS.proc(i.procId) || {}).nome)}${i.dente ? ' · dente ' + OS.esc(i.dente) : ''}`;
 
+  // Mostra em tempo real quais indicadores (B1..B6) serão afetados quando clicar em Salvar
   function impactos() {
     const hojeB1 = !OS.db.atendimentos.some((a) => a.pacienteId === S.pac.id && a.tipo === 'primeira' && a.data > OS.addDias(OS.hoje(), -365)) && !S.caso;
-    const cat = (f) => S.procs.some((p) => f(OS.proc(p.procId) || {}));
-    const flags = [
+      const cat = (f) => S.procs.some((p) => f(OS.proc(p.procId) || {}));
+        const flags = [
       ['B1 - 1ª Consulta Programada', hojeB1], ['B2 - Alta Odontológica', S.conduta === 'concluido'], ['B3 - Exodontia', cat((p) => p.exodontia)],
       ['B5 - Prevenção', cat((p) => p.categoria === 'preventivo')], ['B6 - Restauração ART', cat((p) => p.art)]
     ];
@@ -89,10 +96,10 @@
   }
 
   function desenhar() {
-    const el = $('#bloco-trabalho'), caso = S.caso, plano = caso ? caso.plano : [];
-    const pendentes = plano.filter((i) => i.status === 'planejado');
-    const ultima = caso ? OS.db.atendimentos.filter((a) => a.casoId === caso.id).sort((a, b) => b.data.localeCompare(a.data))[0] : null;
-    const doze = OS.db.atendimentos.some((a) => a.pacienteId === S.pac.id && a.tipo === 'primeira' && a.data > OS.addDias(OS.hoje(), -365));
+      const el = $('#bloco-trabalho'), caso = S.caso, plano = caso ? caso.plano : [];
+        const pendentes = plano.filter((i) => i.status === 'planejado');
+         const ultima = caso ? OS.db.atendimentos.filter((a) => a.casoId === caso.id).sort((a, b) => b.data.localeCompare(a.data))[0] : null;
+             const doze = OS.db.atendimentos.some((a) => a.pacienteId === S.pac.id && a.tipo === 'primeira' && a.data > OS.addDias(OS.hoje(), -365));
 
     el.innerHTML = `
     <div class="patient-context-banner" style="margin-bottom:20px"><div class="patient-context-info"><h3>👤 ${OS.esc(S.pac.nome)}</h3><p>${OS.idade(S.pac.nascimento)} anos ${OS.tagsRisco(S.pac)} · atendendo como ${OS.esc(U.nome)} (${U.cbo})</p></div>
@@ -145,6 +152,7 @@
     ligar();
   }
 
+  // Lê os inputs do SOAP/conduta antes de redesenhar a tela, senão o usuário perde o que digitou!
   function lerCampos() {
     const v = (id) => ($(id) ? $(id).value : '');
     S.soap = { s: v('#s-s'), o: v('#s-o'), a: v('#s-a'), p: v('#s-p') };
@@ -170,7 +178,7 @@
     $('#btn-salvar').addEventListener('click', salvar);
   }
 
-  /* ---------- Salvar: validação + motor de alertas ---------- */
+  /* ---------- Salvar: validação + motor de alertas (trava TSB, alta B2, flúor em criança...) ---------- */
   function salvar() {
     lerCampos();
     const erros = [];
@@ -183,11 +191,11 @@
   }
 
   function revisar() {
-    const alertas = OS.avaliarAtendimento({ paciente: S.pac, caso: S.caso, prof: U, procs: S.procs, conduta: S.conduta, ignorados: S.ignorados });
-    if (!alertas.length) { OS.fecharModal(); return gravar(); }
-    const bloq = alertas.some((a) => a.tipo === 'bloqueio');
-    const icone = { bloqueio: '⛔', sugestao: '💡', aviso: '⚠️' }, cls = { bloqueio: 'alert-danger', sugestao: 'alert-info', aviso: 'alert-warning' };
-    const html = alertas.map((a) => `<div class="alert-box ${cls[a.tipo]}"><span>${icone[a.tipo]}</span><div><strong>${OS.esc(a.titulo)}</strong><br>${a.texto}
+     const alertas = OS.avaliarAtendimento({ paciente: S.pac, caso: S.caso, prof: U, procs: S.procs, conduta: S.conduta, ignorados: S.ignorados });
+      if (!alertas.length) { OS.fecharModal(); return gravar(); }
+        const bloq = alertas.some((a) => a.tipo === 'bloqueio');
+          const icone = { bloqueio: '⛔', sugestao: '💡', aviso: '⚠️' }, cls = { bloqueio: 'alert-danger', sugestao: 'alert-info', aviso: 'alert-warning' };
+            const html = alertas.map((a) => `<div class="alert-box ${cls[a.tipo]}"><span>${icone[a.tipo]}</span><div><strong>${OS.esc(a.titulo)}</strong><br>${a.texto}
       ${a.tipo === 'bloqueio' ? '' : `<div class="alert-actions">${a.acao ? `<button class="btn btn-primary btn-sm" data-ac="${a.acao.fn}" type="button">${OS.esc(a.acao.rotulo)}</button>` : ''}<button class="btn btn-secondary btn-sm" data-ig="${a.id}" type="button">${a.acao ? 'Ignorar' : 'Confirmar mesmo assim'}</button></div>`}</div></div>`).join('');
     const m = OS.modal({ titulo: bloq ? 'Corrija antes de salvar' : 'Antes de salvar', html, botoes: [{ rotulo: 'Voltar e editar', classe: 'btn-secondary', acao: () => OS.fecharModal() }] });
     OS.qsa('[data-ig]', m).forEach((b) => b.addEventListener('click', () => { S.ignorados.add(b.dataset.ig); revisar(); }));
@@ -200,7 +208,7 @@
     }));
   }
 
-  /* ---------- Gravação e retorno ao profissional ---------- */
+  /* ---------- Gravação final e tela de vitória (mostra o impacto nos indicadores!) ---------- */
   function gravar() {
     const r = OS.registrarAtendimento({ pacienteId: S.pac.id, profId: U.id, soap: S.soap, conduta: S.conduta, retornoPrevisto: S.retorno, procedimentos: S.procs, planoNovo: S.planoNovo });
     const calc = OS.calcular({ ine: U.ine, periodo: '12m' });
@@ -213,7 +221,7 @@
     f.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  /* ---------- Entrada via URL ---------- */
+  /* ---------- Entrada via URL (?paciente=... vindo de Lembretes/Pacientes ou ?novo=1) ---------- */
   const qp = new URLSearchParams(location.search);
   if (qp.get('novo')) abrirCadastro('');
   else if (qp.get('paciente') && OS.paciente(qp.get('paciente'))) selecionar(OS.paciente(qp.get('paciente')));

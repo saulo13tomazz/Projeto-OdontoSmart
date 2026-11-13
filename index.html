@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- =========================================================================
+     PORTA DE ENTRADA DO ODONTOSMART (index.html)
+     Ele só existe pra inicializar o banco local e mandar todo mundo direto
+     pra tela de login — tipo recepcionista educado apontando o consultório bem obvio
+     ========================================================================= -->
 <html lang="pt-BR">
 
 <head>
@@ -8,10 +13,13 @@
 </head>
 
 <body>
+    <!-- Plano B caso o JavaScript esteja dormindo no ponto -->
     <p><a href="pages/login.html">Abrir o OdontoSmart</a></p>
+    <!-- Carrega utilitários, fábrica de dados demo e localStorage antes de redirecionar -->
     <script src="js/core/util.js"></script>
     <script src="js/core/seed.js"></script>
     <script src="js/core/store.js"></script>
+    <!-- Redireciona sem deixar essa página vazia presa no botão "Voltar" -->
     <script>location.replace('pages/login.html');</script>
 </body>
 

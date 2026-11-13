@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- =========================================================================
+     DETALHES DO INDICADOR (indicador.html)
+     Página aberta ao clicar em qualquer card do Dashboard: traz régua de
+     metas, fórmula explicada e a lista real de pacientes/procedimentos.
+     ========================================================================= -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +15,19 @@
   <div class="container">
     <aside id="app-menu"></aside>
     <main>
+      <!-- Botão de retorno preservando os filtros + pílulas rápidas pra alternar B1..B6 -->
       <div class="detail-topbar">
         <a id="btn-voltar" class="btn btn-secondary btn-sm" href="dashboard.html">← Voltar ao Dashboard</a>
         <div class="ind-tabs" id="ind-tabs" role="tablist" aria-label="Alternar indicador"></div>
       </div>
 
+      <!-- Filtros espelhados do Dashboard -->
       <div class="toolbar detail-filters">
         <div class="form-group"><label for="f-periodo">Período</label><select id="f-periodo" class="form-control"></select></div>
         <div class="form-group"><label for="f-prof">Profissional</label><select id="f-prof" class="form-control"></select></div>
       </div>
 
+      <!-- Bloco principal (hero), ficha técnica/régua e tabela nominal (todos preenchidos pelo indicador.js) -->
       <div id="ind-hero"></div>
       <div class="detail-grid" id="ind-info"></div>
       <div id="ind-registros"></div>

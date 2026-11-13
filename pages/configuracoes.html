@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- =========================================================================
+     CONFIGURAÇÕES & PARÂMETROS (configuracoes.html)
+     Painel administrativo do INE: cada card abaixo é montado sob medida pelo
+     configuracoes.js para ajustar metas, equipe, senhas, CSV e logs.
+     ========================================================================= -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +17,9 @@
     <main>
       <h2 class="page-title">Configurações & Parâmetros do INE</h2>
       <p class="page-subtitle">Nota Técnica nº 30/2025: divisão por INE, cargas horárias, metas e permissões por CBO. Mudanças nas regras são feitas aqui, sem alterar o código.</p>
+      <!-- Espaço para avisos de sucesso ou erro ao salvar qualquer bloco -->
       <div id="cfg-msg"></div>
+      <!-- Blocos numerados de 1 a 7 (+ troca de senha pessoal) -->
       <div class="card"><div class="card-header">1. Identificação da Equipe (INE)</div><div id="cfg-ine"></div></div>
       <div class="card"><div class="card-header">2. Tabela de Metas e Pesos dos Indicadores</div><div id="cfg-metas"></div></div>
       <div class="card"><div class="card-header">3. Travas de CBO e Acesso</div><div id="cfg-cbo"></div></div>
@@ -24,6 +31,7 @@
     </main>
   </div>
   <div id="app-footer"></div>
+  <!-- Inclui também senhas-iniciais.js e senha.js para criar usuário e trocar senha -->
   <script src="../js/core/util.js"></script><script src="../js/core/seed.js"></script><script src="../js/core/store.js"></script><script src="../js/core/senhas-iniciais.js"></script><script src="../js/core/senha.js"></script>
   <script src="../js/services/indicadores.js"></script><script src="../js/ui/layout.js"></script><script src="../js/ui/componentes.js"></script>
   <script src="../js/pages/configuracoes.js"></script>

@@ -1,10 +1,15 @@
+// ============================================================================
+// CONTROLADOR DA CENTRAL DE LEMBRETES
+// O "post-it digital" do consultório: mostra quanto falta pra meta e quais
+// pacientes têm retorno marcado para hoje (além dos que sumiram no rolê!).
+// ============================================================================
 (function () {
   const OS = window.OS, U = OS.iniciarPagina('lembretes');
   if (!U) return;
   const hoje = OS.hoje();
   OS.qs('#lem-sub').textContent = `Avisos numéricos de metas e retornos agendados para hoje (${OS.fmtData(hoje)}).`;
 
-  /* --- níveis dos indicadores --- */
+  /* --- 1. Níveis dos indicadores (recado direto de quanto falta pro Ótimo) --- */
   const r = OS.calcular({ ine: U.ine, periodo: '12m' });
   const css = { otimo: 'alert-success', bom: 'alert-info', suficiente: 'alert-warning', regular: 'alert-danger', semdados: 'alert-info', info: 'alert-info' };
   const icone = { otimo: '✅', bom: 'ℹ️', suficiente: '⚠️', regular: '🚨', semdados: 'ℹ️', info: 'ℹ️' };
@@ -18,10 +23,11 @@
   });
   OS.qs('#lem-niveis').innerHTML = linhas.join('');
 
-  /* --- casos de hoje e atrasados --- */
+  /* --- 2. Casos de hoje e atrasados (pra ninguém esquecer o João da Silva!) --- */
   const ativos = OS.db.casos.filter((c) => c.ine === U.ine && c.status === 'ativo');
   const ultima = (c) => OS.db.atendimentos.filter((a) => a.casoId === c.id).sort((a, b) => b.data.localeCompare(a.data))[0];
 
+  // Monta o dossiê completo do retorno agendado com odontograma + último SOAP
   function cartaoCaso(c) {
     const p = OS.paciente(c.pacienteId), a = ultima(c);
     const pend = c.plano.filter((i) => i.status === 'planejado');
@@ -43,6 +49,7 @@
     OS.qsa('.odonto', alvo).forEach((el, i) => OS.odontograma(el, OS.estadoOdonto(lista[i].plano), null, null));
   }
   montar(OS.qs('#lem-hoje'), ativos.filter((c) => c.retornoPrevisto === hoje), 'Nenhum retorno agendado para hoje.');
+  // Ordena os retornos atrasados do mais "sumido" para o mais recente
   const atras = ativos.filter((c) => c.retornoPrevisto && c.retornoPrevisto < hoje).sort((a, b) => a.retornoPrevisto.localeCompare(b.retornoPrevisto));
   const alvoAt = OS.qs('#lem-atrasados');
   alvoAt.innerHTML = atras.length ? `<div class="table-scroll"><table class="data-table"><thead><tr><th>Paciente</th><th>Retorno previsto</th><th>Atraso</th><th>Contato</th><th></th></tr></thead><tbody>` +

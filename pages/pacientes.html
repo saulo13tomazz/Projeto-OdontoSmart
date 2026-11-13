@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- =========================================================================
+     PACIENTES CADASTRADOS (pacientes.html)
+     Catálogo geral dos moradores da UBS com busca, filtros por grupo
+     prioritário e linha do tempo expansível para ver cada indicador pontuado.
+     ========================================================================= -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +21,7 @@
       <div class="card">
         <div class="card-header"><span>Consulta de pacientes</span><a class="btn btn-primary btn-sm" href="atendimento.html?novo=1">+ Cadastrar novo paciente</a></div>
         <p id="pac-resumo" style="font-size:13px;color:#475569;margin-bottom:15px"></p>
+        <!-- Barra de pesquisa + filtro por risco/situação -->
         <div class="toolbar">
           <div class="form-group" style="flex:1"><label for="pac-busca">Buscar por CPF, CNS, NIS ou nome</label><input id="pac-busca" class="form-control" type="search" autocomplete="off"></div>
           <div class="form-group"><label for="pac-filtro">Filtro</label>
@@ -24,6 +30,7 @@
               <option value="cri">Crianças 6 a 12 anos</option><option value="ges">Gestantes</option><option value="dia">Diabéticos</option>
             </select></div>
         </div>
+        <!-- Acordions montados pelo pacientes.js + botão de paginação -->
         <div id="pac-lista"></div>
         <div style="text-align:center;margin-top:12px"><button id="pac-mais" class="btn btn-secondary" hidden>Mostrar mais</button></div>
       </div>

@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!-- =========================================================================
+     DASHBOARD DE INDICADORES (dashboard.html)
+     Vitrine enxuta da Série B: mostra a nota da equipe no topo e 6 cards
+     clicáveis que levam direto para os detalhes completos de cada indicador.
+     ========================================================================= -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,10 +11,13 @@
   <link rel="stylesheet" href="../css/base.css"><link rel="stylesheet" href="../css/components.css">
 </head>
 <body>
+  <!-- Cabeçalho padrão injetado pelo layout.js -->
   <div id="app-header"></div>
   <div class="container">
+    <!-- Menu lateral escuro injetado pelo layout.js -->
     <aside id="app-menu"></aside>
     <main>
+      <!-- Título + barra de filtros rápidos de período e profissional -->
       <div class="dash-top">
         <div>
           <h2 class="page-title">Indicadores de Saúde Bucal (Série B)</h2>
@@ -21,6 +29,7 @@
         </div>
       </div>
 
+      <!-- Placar geral ponderado (0 a 1) + 6 cards clicáveis B1..B6 -->
       <div id="dash-score"></div>
       <div class="indicators-grid" id="dash-grid"></div>
     </main>

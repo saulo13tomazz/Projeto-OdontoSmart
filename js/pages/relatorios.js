@@ -1,13 +1,21 @@
+// ============================================================================
+// CONTROLADOR DE RELATÓRIOS & BUSCA ATIVA
+// Transforma os números dos indicadores em listas acionáveis com nome e telefone
+// pra agente comunitária e equipe ligarem buscando quem sumiu (e exporta pro Excel!).
+// ============================================================================
 (function () {
   const OS = window.OS, U = OS.iniciarPagina('relatorios');
   if (!U) return;
+  // LIM = 100 na tela para o navegador não engasgar; o CSV exporta a galera inteira
   const hoje = OS.hoje(), ini = OS.addDias(hoje, -365), LIM = 100;
   let atual = { cab: [], linhas: [] };
 
   const pacs = OS.db.pacientes.filter((p) => p.ine === U.ine);
+  // Monta as colunas fixas de qualquer relatório e joga quem tem marcador de risco pro topo da fila
   const base = (p) => [p.nome, OS.idade(p.nascimento), p.tel || '—', [p.riscos.includes('gestante') ? 'Gestante' : '', p.riscos.includes('diabetico') ? 'Diabético' : ''].filter(Boolean).join(', ') || '—'];
   const prioridade = (p) => (p.riscos.length ? 0 : 1);
 
+  // Dicionário de relatórios: cada chave gera cabeçalho, linhas e dica pro relatório escolhido
   const RELS = {
     b1() {
       const com = new Set(OS.db.atendimentos.filter((a) => a.ine === U.ine && a.tipo === 'primeira' && a.data >= ini).map((a) => a.pacienteId));
@@ -30,6 +38,7 @@
     }
   };
 
+  // Gera e desenha a tabela conforme o relatório selecionado no combo
   function desenhar() {
     const r = RELS[OS.qs('#r-tipo').value]();
     atual = r;
@@ -39,6 +48,7 @@
       : '<div class="empty">Nenhuma pendência nesta lista.</div>';
   }
   OS.qs('#r-tipo').addEventListener('change', desenhar);
+  // Botão CSV: baixa a planilha inteira e anota no log de auditoria que alguém exportou dados
   OS.qs('#r-csv').addEventListener('click', () => { OS.baixarCSV(`odontosmart-${OS.qs('#r-tipo').value}-${hoje}.csv`, [atual.cab].concat(atual.linhas)); OS.logAcesso('exportar-relatorio'); });
   desenhar();
 })();

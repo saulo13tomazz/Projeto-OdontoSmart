@@ -1,9 +1,16 @@
+// ============================================================================
+// CONTROLADOR DA LISTA DE PACIENTES
+// O "fichário da recepção": permite buscar moradores, filtrar por grupo de risco
+// e abrir a linha do tempo de tudo que o paciente já aprontou na cadeira do dentista.
+// ============================================================================
 (function () {
   const OS = window.OS, U = OS.iniciarPagina('pacientes');
   if (!U) return;
+  // Mostra 25 por vez para não transformar o scroll numa maratona de 350 linhas
   const hoje = OS.hoje(), ini = OS.addDias(hoje, -365), PAGINA = 25;
   let limite = PAGINA;
 
+  // Indexa atendimentos dos últimos 12 meses por paciente para consulta instantânea (O(1) no objeto!)
   const meusAts = OS.db.atendimentos.filter((a) => a.ine === U.ine && a.data >= ini);
   const porPac = {};
   meusAts.forEach((a) => (porPac[a.pacienteId] = porPac[a.pacienteId] || []).push(a));
@@ -11,7 +18,7 @@
 
   OS.qs('#pac-resumo').innerHTML = `Base local: <strong>${lista0.length} cadastrados na UBS/UPA</strong> e <strong>${Object.keys(porPac).length} atendidos em indicadores</strong> (últimos 12 meses).`;
 
-  // indicadores em que o paciente já entrou
+  // Descobre em quais indicadores (B1, B2, B3, B5, B6) esse paciente já marcou gol
   function indicadoresDe(ats) {
     const s = new Set();
     ats.forEach((a) => {
@@ -28,6 +35,7 @@
   }
   const emColetiva = (id) => OS.db.coletivas.some((c) => c.ine === U.ine && c.escovacao && c.data >= ini && c.participantes.includes(id));
 
+  // Monta a linha do tempo cronológica de consultas e escovações escolares do paciente
   function linhaTempo(p) {
     const ev = [];
     (porPac[p.id] || []).slice().sort((a, b) => a.data.localeCompare(b.data)).forEach((a) => {
@@ -45,6 +53,7 @@
     return ev.length ? `<div class="timeline">${ev.map((e) => `<div class="timeline-item"><div class="timeline-date">${OS.esc(e[1])}</div><div class="timeline-desc">${OS.esc(e[2])}</div></div>`).join('')}</div>` : '';
   }
 
+  // Aplica o texto da busca + o filtro escolhido (todos, com/sem indicador, criança, gestante, diabético)
   function filtrar() {
     const t = OS.qs('#pac-busca').value, f = OS.qs('#pac-filtro').value;
     const l = t ? OS.buscarPacientes(t, U.ine) : lista0;
@@ -57,6 +66,7 @@
     });
   }
 
+  // Renderiza os acordions (<details>) dos pacientes e controla o botão "Mostrar mais"
   function desenhar() {
     const l = filtrar(), alvo = OS.qs('#pac-lista');
     if (!l.length) { alvo.innerHTML = '<div class="empty">Nenhum paciente encontrado. <a href="atendimento.html?novo=1">Cadastrar novo paciente</a></div>'; OS.qs('#pac-mais').hidden = true; return; }

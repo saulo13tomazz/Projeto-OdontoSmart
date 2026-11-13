@@ -1,5 +1,8 @@
-/* ===== Componentes reutilizáveis ===== */
+/*
+   visual do OdontoSmart: cartões translúcidos, badges coloridas,
+   barrinhas de progresso, tabelas e janelas modais que aparecem em todo o app. */
 .card {
+  /* Efeito vidro suave para deixar a foto do consultório respirar atrás sem ofuscar o texto */
   background: rgba(255, 255, 255, .93);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -15,7 +18,8 @@
 .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 18px; }
 .toolbar .form-group { min-width: 200px; }
 
-/* ---------- Indicadores (Dashboard enxuto & cards clicáveis) ---------- */
+/*  Indicadores (Dashboard enxuto & cards clicáveis)
+   Visual limpo estilo vitrine: número grande na frente e barra colorida embaixo  */
 .dash-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
 .dash-top .page-subtitle { margin-bottom: 0; }
 .indicators-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 18px; margin-top: 20px; }
@@ -50,7 +54,7 @@
 }
 .indicator-card-link:hover .indicator-cta { color: var(--brand-700); }
 
-/* ---------- Página de Detalhes do Indicador ---------- */
+/* Página de Detalhes do Indicador (abas B1..B6, bloco hero e régua de metas) */
 .detail-topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
 .ind-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .ind-tab {
@@ -78,7 +82,7 @@
 .formula-list p { color: var(--ink-700); }
 .row-current td { background: var(--brand-50); }
 
-/* ---------- Badges ---------- */
+/*  Badges (pílulas coloridas com bolinha de status: Ótimo, Bom, Suficiente, Regular) */
 .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; white-space: nowrap; }
 .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .85; }
 .badge-otimo { background: #dcfce7; color: #15803d; }
@@ -87,7 +91,7 @@
 .badge-regular { background: #fee2e2; color: #b91c1c; }
 .badge-info, .badge-semdados { background: var(--ink-100); color: var(--ink-500); }
 
-/* ---------- Progresso ---------- */
+/*  Progresso (barrinha animada que enche com carinho) */
 .progress-container { background: var(--ink-100); border-radius: 999px; height: 10px; width: 100%; margin: 14px 0 10px; overflow: hidden; }
 .progress-bar { height: 100%; border-radius: 999px; transition: width .8s var(--ease); }
 .bg-green { background: linear-gradient(90deg, #4ade80, #16a34a); }
@@ -102,7 +106,7 @@
 .goal-banner.ok { background: #f0fdf4; color: #166534; }
 .goal-banner.warn { background: #fffbeb; color: #92400e; }
 
-/* ---------- Pontuação ---------- */
+/*  Pontuação (banner escuro no topo do Dashboard com gradiente + foto da clínica) */
 .score-box {
   display: flex; gap: 28px; flex-wrap: wrap; align-items: center; justify-content: space-between;
   background:
@@ -122,7 +126,7 @@
 .score-kpis > div { border-left: 1px solid rgba(148, 163, 184, .2); padding-left: 20px; }
 .score-kpis strong { color: #fff; font-size: 16px; display: block; }
 
-/* ---------- Alertas ---------- */
+/*  Alertas (caixinhas de aviso, bloqueio de TSB e boas notícias)  */
 .alert-box { padding: 14px 16px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 13.5px; display: flex; gap: 12px; align-items: flex-start; border: 1px solid transparent; border-left-width: 4px; }
 .alert-box > span:first-child { font-size: 16px; line-height: 1.3; }
 .alert-warning { background: #fffbeb; border-color: #fde68a; border-left-color: #f59e0b; color: #92400e; }
@@ -131,7 +135,7 @@
 .alert-success { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #22c55e; color: #166534; }
 .alert-box .alert-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* ---------- Tabelas ---------- */
+/*  Tabelas (cabeçalho grudento no topo e efeito na linha)  */
 .table-scroll { overflow-x: auto; border-radius: var(--radius-sm); }
 .data-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; margin-top: 10px; }
 .data-table th, .data-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--ink-100); vertical-align: top; }
@@ -141,7 +145,7 @@
 .data-table tbody tr { transition: background .15s; }
 .data-table tbody tr:hover { background: #f8fbff; }
 
-/* ---------- Paciente (accordion) ---------- */
+/* Paciente expansível com clique no nome)  */
 details.patient-detail { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; background: var(--surface); overflow: hidden; transition: box-shadow .2s var(--ease); }
 details.patient-detail:hover { box-shadow: var(--shadow); }
 details.patient-detail summary { list-style: none; padding: 14px 18px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; user-select: none; }
@@ -150,14 +154,14 @@ details.patient-detail summary:hover { background: var(--ink-50); }
 details.patient-detail[open] summary { border-bottom: 1px solid var(--border); background: var(--brand-50); color: var(--brand-700); }
 .patient-content { padding: 20px; }
 
-/* ---------- Linha do tempo ---------- */
+/* Linha do tempo (histórico vertical de atendimentos do paciente)  */
 .timeline { margin-top: 15px; border-left: 2px solid var(--brand-100); padding-left: 18px; }
 .timeline-item { margin-bottom: 14px; position: relative; }
 .timeline-item::before { content: ''; width: 10px; height: 10px; background: var(--brand-500); border: 3px solid var(--brand-50); border-radius: 50%; position: absolute; left: -25px; top: 3px; box-sizing: content-box; }
 .timeline-date { font-size: 11.5px; font-weight: 700; color: var(--brand-700); }
 .timeline-desc { font-size: 13px; color: var(--ink-700); }
 
-/* ---------- Formulários ---------- */
+/*  Formulários (campos, selects com setinha SVG e destaque azul/vermelho no foco/erro) */
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group label { font-size: 12px; font-weight: 600; color: var(--ink-700); }
@@ -181,7 +185,7 @@ input[type="checkbox"] { accent-color: var(--brand-600); width: 15px; height: 15
 .span-2 { grid-column: span 2; }
 @media (max-width: 560px) { .span-2 { grid-column: span 1; } }
 
-/* ---------- Botões ---------- */
+/*  Botões (efeito afundadinho ao clicar porque clicar tem que dar gosto!) */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 10px 18px; border-radius: 10px; border: 1px solid transparent;
@@ -200,7 +204,7 @@ input[type="checkbox"] { accent-color: var(--brand-600); width: 15px; height: 15
 .btn-danger { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
 .btn-sm { padding: 6px 12px; font-size: 12.5px; border-radius: 8px; }
 
-/* ---------- Tags ---------- */
+/*  Tags, chips de procedimentos lançados e estado vazio  */
 .risk-tag { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; margin: 2px 5px 2px 0; }
 .tag-gestante { background: #fce7f3; color: #be185d; }
 .tag-diabetico { background: #fef3c7; color: #b45309; }
@@ -213,7 +217,7 @@ input[type="checkbox"] { accent-color: var(--brand-600); width: 15px; height: 15
 
 .empty { padding: 30px; text-align: center; color: var(--ink-500); font-size: 14px; border: 1.5px dashed #d5dbe4; border-radius: var(--radius); background: var(--ink-50); }
 
-/* ---------- Modal ---------- */
+/*  Modal (fundo embaçado + caixa saltando com animação suave)  */
 .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, .5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; animation: fadeIn .2s ease both; }
 .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 26px; width: min(620px, 100%); max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: popIn .25s var(--ease) both; }
 .modal h3 { margin-bottom: 16px; color: var(--ink-900); font-size: 18px; letter-spacing: -.3px; }

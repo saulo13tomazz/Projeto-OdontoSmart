@@ -1,5 +1,8 @@
-/* ===== Base: tokens de design, reset e estrutura da página (cabeçalho, menu, conteúdo, rodapé) ===== */
+/* tokens de design, reset e estrutura da página (cabeçalho, menu, conteúdo, rodapé)
+   define cores, fontes, barra lateral,
+   vidro fosco e o fundo de consultório pra dar aquele ar profissional! */
 :root {
+  /* Tons principais (ciano clínico + índigo suave) */
   --brand-50: #ecfeff;
   --brand-100: #cffafe;
   --brand-400: #22d3ee;
@@ -8,6 +11,7 @@
   --brand-700: #0e7490;
   --accent: #6366f1;
 
+  /* Escala de cinzas para textos e fundos sem cansar a vista */
   --ink-900: #0f172a;
   --ink-800: #1e293b;
   --ink-700: #334155;
@@ -21,6 +25,7 @@
   --surface: #ffffff;
   --border: #e6eaf0;
 
+  /* Cantos arredondados e sombras elegantes */
   --radius-sm: 8px;
   --radius: 12px;
   --radius-lg: 18px;
@@ -34,11 +39,13 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
 }
 
+/* Reset universal: tira margens surpresa dos navegadores */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
   display: flex; flex-direction: column; min-height: 100vh;
+  /* Foto do consultório atrás com véu clarinho por cima para nunca atrapalhar a leitura */
   background:
     linear-gradient(180deg, rgba(245, 247, 251, .84) 0%, rgba(236, 254, 255, .88) 100%),
     url('../assets/bg-clinica.jpg') center / cover no-repeat fixed;
@@ -49,15 +56,16 @@ body {
 button, input, select, textarea { font: inherit; color: inherit; }
 a { color: var(--brand-600); text-decoration: none; }
 a:hover { text-decoration: underline; }
+/* Foco acessível bem visível para quem navega pelo teclado */
 :focus-visible { outline: 3px solid rgba(6, 182, 212, .45); outline-offset: 2px; border-radius: 6px; }
 ::selection { background: var(--brand-100); }
 
-/* Barra de rolagem discreta */
+/* Barra de rolagem discreta (zero cara de Windows) */
 * { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; border: 3px solid transparent; background-clip: padding-box; }
 
-/* ---------- Cabeçalho ---------- */
+/* Cabeçalho fixo com efeito vidro fosco  */
 #app-header { position: sticky; top: 0; z-index: 30; }
 header {
   height: var(--header-h);
@@ -95,10 +103,10 @@ header .logout {
 }
 header .logout:hover { background: #fee2e2; color: #b91c1c; border-color: #fecaca; text-decoration: none; }
 
-/* ---------- Estrutura ---------- */
+/* - Estrutura  */
 .container { display: flex; flex: 1; min-height: 0; }
 
-/* ---------- Menu lateral ---------- */
+/* - Menu lateral escuro (contraste elegante para achar a tela sem pensar) */
 aside {
   width: var(--sidebar-w); flex-shrink: 0;
   background: var(--ink-900);
@@ -132,7 +140,7 @@ aside .menu-foot {
 }
 aside .menu-foot strong { color: #e2e8f0; display: block; margin-bottom: 2px; }
 
-/* ---------- Conteúdo ---------- */
+/*  Conteúdo principal (entra dando um pulinho suave)  */
 main { flex: 1; min-width: 0; padding: 32px 36px 40px; overflow-x: auto; animation: fadeUp .35s var(--ease) both; }
 main > * { max-width: 1400px; }
 
@@ -143,7 +151,7 @@ footer { color: var(--ink-400); text-align: center; padding: 18px; font-size: 12
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-/* ---------- Login ---------- */
+/* - Tela de Login (cartão central translúcido sobre foto clínica)  */
 body.login {
   align-items: center; justify-content: center; padding: 24px;
   background:
@@ -171,7 +179,7 @@ body.login {
 .login-box .btn { padding: 12px 20px; font-size: 15px; margin-top: 4px; }
 .login-box .login-foot { margin-top: 18px; text-align: center; font-size: 12px; color: var(--ink-400); }
 
-/* ---------- Responsivo ---------- */
+/* Responsivo (no celular a barra lateral vira menu horizontal no topo)  */
 @media (max-width: 960px) {
   header { padding: 0 16px; }
   header .user-info { display: none; }
@@ -183,4 +191,5 @@ body.login {
   main { padding: 22px 16px 32px; }
 }
 @media (max-width: 520px) { header .brand span { display: none; } }
+/* Respeita quem prefere menos movimento na tela (acessibilidade em primeiro lugar!) */
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
