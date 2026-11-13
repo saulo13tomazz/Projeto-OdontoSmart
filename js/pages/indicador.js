@@ -201,10 +201,9 @@
       <strong>${i.cod}</strong><span>${OS.fmtPct(i.pct)}</span>
     </button>`).join('');
     OS.qsa('.ind-tab', OS.qs('#ind-tabs')).forEach((b) => b.addEventListener('click', () => {
-      if (codAtual === b.dataset.cod) return;
       codAtual = b.dataset.cod;
       history.replaceState(null, '', `indicador.html?cod=${codAtual}&${qsFiltro}`);
-      OS.transicao(desenhar);
+      desenhar();
     }));
 
     const cls = ind.nivel === 'otimo' ? 'ok' : ind.nivel === 'suficiente' || ind.nivel === 'regular' ? 'warn' : '';
@@ -258,7 +257,7 @@
     OS.qs('#ind-registros').innerHTML = registrosDoIndicador(ind.cod, r.janela);
   }
 
-  per.addEventListener('change', () => OS.transicao(desenhar));
-  prof.addEventListener('change', () => OS.transicao(desenhar));
+  per.addEventListener('change', desenhar);
+  prof.addEventListener('change', desenhar);
   desenhar();
 })();

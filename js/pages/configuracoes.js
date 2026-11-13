@@ -70,20 +70,53 @@
 
   /* 4. Usuários */
   function users() {
-    $('#cfg-users').innerHTML = `<div class="table-scroll"><table class="data-table"><thead><tr><th>Nome</th><th>Perfil</th><th>CBO</th><th>Registro</th><th>INE</th></tr></thead><tbody>${OS.db.profissionais.map((p) => `<tr><td>${OS.esc(p.nome)}</td><td>${OS.perfilNome(p.cbo)}</td><td>${OS.esc(p.cboCodigo)}</td><td>${OS.esc(p.registro)}</td><td>${OS.esc(p.ine)}</td></tr>`).join('')}</tbody></table></div>
-      <h4 style="margin:16px 0 8px;font-size:14px">Cadastrar profissional</h4>
+    const adm = OS.senha.ehAdmin(U.id);
+
+    const linhas = OS.db.profissionais.map((p) => {
+      const st = OS.senha.tem(p.id) ? '<span class="badge badge-otimo">Definida</span>' : '<span class="badge badge-regular">Sem senha</span>';
+      return `<tr><td>${OS.esc(p.nome)}</td><td>${OS.perfilNome(p.cbo)}</td><td>${OS.esc(p.cboCodigo)}</td><td>${OS.esc(p.registro)}</td><td>${OS.esc(p.ine)}</td><td>${st}</td></tr>`;
+    }).join('');
+
+    const cadastro = adm ? `<h4 style="margin:16px 0 8px;font-size:14px">Cadastrar profissional</h4>
       <div class="form-grid">
         <div class="form-group"><label for="u-nome">Nome</label><input id="u-nome" class="form-control"></div>
         <div class="form-group"><label for="u-cbo">Perfil</label><select id="u-cbo" class="form-control"><option value="CD">Cirurgião-Dentista</option><option value="TSB">Técnico em Saúde Bucal</option></select></div>
         <div class="form-group"><label for="u-reg">Registro no conselho</label><input id="u-reg" class="form-control"></div>
-        <div class="form-group"><label for="u-ine">Equipe (INE)</label><select id="u-ine" class="form-control">${OS.db.ines.map((i) => `<option value="${i.ine}">${OS.esc(i.ine)} · ${OS.esc(i.equipe)}</option>`).join('')}</select></div></div>
-      <button class="btn btn-primary" id="u-add" type="button">Adicionar profissional</button>`;
+        <div class="form-group"><label for="u-ine">Equipe (INE)</label><select id="u-ine" class="form-control">${OS.db.ines.map((i) => `<option value="${i.ine}">${OS.esc(i.ine)} · ${OS.esc(i.equipe)}</option>`).join('')}</select></div>
+        <div class="form-group"><label for="u-senha">Senha inicial</label><input id="u-senha" type="password" class="form-control" autocomplete="new-password"><span class="hint">Mínimo de ${OS.senha.MIN} caracteres. Entregue esta senha ao profissional.</span></div></div>
+      <button class="btn btn-primary" id="u-add" type="button">Adicionar profissional</button>`
+      : '<div class="alert-box alert-info">Somente o administrador cadastra novos profissionais.</div>';
+
+    $('#cfg-users').innerHTML = `<div class="table-scroll"><table class="data-table"><thead><tr><th>Nome</th><th>Perfil</th><th>CBO</th><th>Registro</th><th>INE</th><th>Senha</th></tr></thead><tbody>${linhas}</tbody></table></div>${cadastro}`;
+    if (!adm) return;
+
     $('#u-add').addEventListener('click', () => {
-      const nome = $('#u-nome').value.trim(), reg = $('#u-reg').value.trim();
+      const nome = $('#u-nome').value.trim(), reg = $('#u-reg').value.trim(), senha = $('#u-senha').value;
       if (!nome || !reg) return aviso('Informe nome e registro no conselho.', 'danger');
-      const cb = $('#u-cbo').value;
-      OS.db.profissionais.push({ id: OS.uid('pr'), nome, cbo: cb, cboCodigo: cb === 'CD' ? '223293' : '322425', registro: reg, ine: $('#u-ine').value });
-      OS.registrarAlteracao(`Profissional cadastrado: ${nome} (${cb}).`); OS.salvar(); aviso('Profissional cadastrado.'); users(); log();
+      const erro = OS.senha.validar(senha);
+      if (erro) return aviso(erro, 'danger');
+      const cb = $('#u-cbo').value, id = OS.uid('pr');
+      OS.db.profissionais.push({ id, nome, cbo: cb, cboCodigo: cb === 'CD' ? '223293' : '322425', registro: reg, ine: $('#u-ine').value });
+      OS.senha.definir(id, senha);
+      OS.registrarAlteracao(`Profissional cadastrado: ${nome} (${cb}), com senha inicial definida.`); OS.salvar(); aviso('Profissional cadastrado com senha inicial.'); users(); log();
+    });
+  }
+
+  function senhaCfg() {
+    $('#cfg-senha').innerHTML = `<p style="font-size:13px;color:#475569;margin-bottom:10px">Altera a senha de <strong>${OS.esc(U.nome)}</strong>. Informe a senha atual para confirmar.</p>
+      <div class="form-grid">
+        <div class="form-group"><label for="s-atual">Senha atual</label><input id="s-atual" type="password" class="form-control" autocomplete="current-password"></div>
+        <div class="form-group"><label for="s-nova">Nova senha</label><input id="s-nova" type="password" class="form-control" autocomplete="new-password"><span class="hint">Mínimo de ${OS.senha.MIN} caracteres.</span></div>
+        <div class="form-group"><label for="s-conf">Confirmar nova senha</label><input id="s-conf" type="password" class="form-control" autocomplete="new-password"></div></div>
+      <button class="btn btn-primary" id="s-salvar" type="button">Alterar senha</button>`;
+    $('#s-salvar').addEventListener('click', () => {
+      const r = OS.senha.verificar(U.id, $('#s-atual').value);
+      if (!r.ok) return aviso(r.erro, 'danger');
+      const erro = OS.senha.validar($('#s-nova').value, $('#s-conf').value);
+      if (erro) return aviso(erro, 'danger');
+      OS.senha.definir(U.id, $('#s-nova').value);
+      OS.registrarAlteracao(`Senha alterada: ${U.nome}.`); OS.salvar();
+      aviso('Senha alterada com sucesso.'); senhaCfg(); log();
     });
   }
 
@@ -129,5 +162,5 @@
     $('#r-reset').addEventListener('click', () => OS.modal({ titulo: 'Restaurar dados demonstrativos?', html: '<p>Cadastros, atendimentos e configurações feitos neste navegador serão apagados. Esta ação não pode ser desfeita.</p>', botoes: [{ rotulo: 'Cancelar', acao: OS.fecharModal }, { rotulo: 'Apagar e restaurar', classe: 'btn-danger', acao: () => { OS.resetar(); OS.sessao.limpar(); location.href = 'login.html'; } }] }));
   }
 
-  ine(); metas(); cbo(); users(); importar(); log(); reset();
+  ine(); metas(); cbo(); users(); senhaCfg(); importar(); log(); reset();
 })();

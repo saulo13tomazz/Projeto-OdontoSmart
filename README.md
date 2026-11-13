@@ -113,6 +113,8 @@ odontosmart/
     │   ├── util.js             # Formatação de datas, CPF, CSV e componentes modais
     │   ├── seed.js             # Gerador determinístico de dados de demonstração
     │   └── store.js            # Repositório de dados local (localStorage) e regras de gravação
+    │   └── senha.js  # Senhas dos perfis (hash, verificação, bloqueio)
+    │   └── senhas-iniciais.js  # Senhas iniciais e administradores (editado pelo admin)
     ├── services/               # Motores de regras de negócio
     │   ├── indicadores.js      # Motor matemático de cálculo dos indicadores B1-B6
     │   └── alertas.js          # Motor de alertas clínicos e bloqueios de CBO
@@ -185,3 +187,19 @@ Por ser um projeto web moderno baseado em padrões abertos, não requer Node.js,
    ```
 2. Abra o arquivo `index.html` diretamente em qualquer navegador moderno (Chrome, Edge, Firefox, Safari).
 3. Selecione a equipe e o perfil desejado na tela inicial para começar a explorar o sistema.
+
+---
+
+## Senha dos perfis
+
+As senhas são definidas pelo **administrador** e entregues aos profissionais. Não existe criação de senha no primeiro acesso.
+
+- **Senhas iniciais:** o administrador edita `js/core/senhas-iniciais.js`, com uma senha por profissional (mínimo de 6 caracteres). Ao abrir o sistema, elas são aplicadas a quem ainda não tem senha. As senhas que vêm no arquivo são exemplos: troque antes de usar.
+- **Quem é administrador:** lista `OS.ADMIN_IDS` no mesmo arquivo (padrão: Dr. Ramon, `pr1`).
+- **Administrador em Configurações (seção 4):** cadastra novos profissionais, já com a senha inicial. Ninguém define ou redefine a senha de outro perfil pela tela; quem não é administrador vê só o status da senha.
+- **Profissional sem senha:** não consegue entrar. O login avisa "Solicite ao administrador".
+- **Troca da própria senha:** cada profissional, inclusive o administrador, muda apenas a sua, em Configurações, seção 4.1, informando a senha atual.
+- **Onde fica guardada:** no `localStorage`, na base `odontosmart:v2`, coleção `credenciais` (`OS.db.credenciais[idDoProfissional]`), apenas como `salt` + `hash`. `OS.db.profissionais` não recebe nenhum campo de senha, e as senhas nunca vão para o histórico.
+- **Código:** `js/core/senhas-iniciais.js` (dados do administrador), `js/core/senha.js` (regras), `pages/login.html` + `js/pages/login.js` (entrada) e `pages/configuracoes.html` + `js/pages/configuracoes.js` (seções 4 e 4.1).
+- **Bloqueio:** 5 senhas erradas seguidas bloqueiam o perfil por 30 segundos. As falhas ficam registradas em "Acessos".
+- **Limites:** o arquivo `senhas-iniciais.js` guarda as senhas em texto puro; depois da primeira abertura, apague as linhas. O controle de administrador também roda no navegador, então protege contra uso casual, não substitui autenticação em servidor. "Restaurar dados demonstrativos" apaga as credenciais, e as de `senhas-iniciais.js` voltam a valer na próxima abertura.

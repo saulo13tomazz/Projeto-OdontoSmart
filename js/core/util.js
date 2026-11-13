@@ -54,34 +54,4 @@
     return bg;
   };
   OS.fecharModal = () => { const m = document.getElementById('os-modal'); if (m) m.remove(); };
-
-  /* Transição suave dentro da mesma página (View Transitions API quando disponível) */
-  OS.transicao = (fn) => {
-    if (typeof document !== 'undefined' && document.startViewTransition && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      document.startViewTransition(() => fn());
-    } else {
-      fn();
-    }
-  };
-
-  /* Navegação entre páginas com animação de saída suave */
-  OS.navegar = (href) => {
-    if (!href) return;
-    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      location.href = href;
-      return;
-    }
-    if (typeof document !== 'undefined' && document.body) {
-      document.body.classList.add('page-leaving');
-      setTimeout(() => { location.href = href; }, 180);
-    } else {
-      location.href = href;
-    }
-  };
-
-  if (typeof window !== 'undefined' && window.addEventListener) {
-    window.addEventListener('pageshow', () => {
-      if (document.body) document.body.classList.remove('page-leaving');
-    });
-  }
 })();

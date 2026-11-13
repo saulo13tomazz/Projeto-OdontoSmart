@@ -132,55 +132,16 @@ aside .menu-foot {
 }
 aside .menu-foot strong { color: #e2e8f0; display: block; margin-bottom: 2px; }
 
-/* ---------- Conteúdo & Transições entre Telas ---------- */
-@view-transition { navigation: auto; }
-#app-header { view-transition-name: app-header; }
-aside { view-transition-name: app-menu; }
-main {
-  view-transition-name: app-main;
-  flex: 1; min-width: 0; padding: 32px 36px 40px; overflow-x: auto;
-  animation: pageEnter .42s cubic-bezier(.22, 1, .36, 1) both;
-  transition: opacity .18s cubic-bezier(.22, 1, .36, 1), transform .18s cubic-bezier(.22, 1, .36, 1), filter .18s cubic-bezier(.22, 1, .36, 1);
-}
+/* ---------- Conteúdo ---------- */
+main { flex: 1; min-width: 0; padding: 32px 36px 40px; overflow-x: auto; animation: fadeUp .35s var(--ease) both; }
 main > * { max-width: 1400px; }
-
-body.page-leaving main,
-body.page-leaving .login-box {
-  opacity: 0;
-  transform: translateY(8px) scale(.992);
-  filter: blur(2px);
-  pointer-events: none;
-}
-
-::view-transition-old(app-main) {
-  animation: pageLeave .2s cubic-bezier(.4, 0, 1, 1) both;
-}
-::view-transition-new(app-main) {
-  animation: pageEnter .34s cubic-bezier(.22, 1, .36, 1) both;
-}
-
-/* Cascata suave nos cards ao abrir a tela */
-.indicators-grid > .indicator-card,
-main > .card,
-.detail-grid > .card {
-  animation: cardCascade .46s cubic-bezier(.22, 1, .36, 1) both;
-}
-.indicators-grid > .indicator-card:nth-child(1), main > .card:nth-of-type(1) { animation-delay: .03s; }
-.indicators-grid > .indicator-card:nth-child(2), main > .card:nth-of-type(2) { animation-delay: .07s; }
-.indicators-grid > .indicator-card:nth-child(3), main > .card:nth-of-type(3) { animation-delay: .11s; }
-.indicators-grid > .indicator-card:nth-child(4), main > .card:nth-of-type(4) { animation-delay: .15s; }
-.indicators-grid > .indicator-card:nth-child(5), main > .card:nth-of-type(5) { animation-delay: .19s; }
-.indicators-grid > .indicator-card:nth-child(6), main > .card:nth-of-type(6) { animation-delay: .23s; }
 
 footer { color: var(--ink-400); text-align: center; padding: 18px; font-size: 12px; border-top: 1px solid var(--border); background: var(--surface); }
 
 .page-title { font-size: 24px; font-weight: 800; letter-spacing: -.5px; color: var(--ink-900); margin-bottom: 6px; }
 .page-subtitle { font-size: 14px; color: var(--ink-500); margin-bottom: 26px; max-width: 820px; }
 
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-@keyframes pageEnter { from { opacity: 0; transform: translateY(10px) scale(.994); } to { opacity: 1; transform: none; } }
-@keyframes pageLeave { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-6px) scale(.995); } }
-@keyframes cardCascade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Login ---------- */
 body.login {
@@ -197,8 +158,7 @@ body.login {
   width: min(440px, 100%);
   box-shadow: 0 24px 60px rgba(15, 23, 42, .35);
   border: 1px solid rgba(255, 255, 255, .75);
-  animation: fadeUp .45s cubic-bezier(.22, 1, .36, 1) both;
-  transition: opacity .18s cubic-bezier(.22, 1, .36, 1), transform .18s cubic-bezier(.22, 1, .36, 1), filter .18s cubic-bezier(.22, 1, .36, 1);
+  animation: fadeUp .45s var(--ease) both;
 }
 .login-box .login-logo {
   width: 52px; height: 52px; border-radius: 15px; margin-bottom: 18px;

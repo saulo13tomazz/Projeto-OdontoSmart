@@ -29,7 +29,6 @@
     </div>`;
     OS.qs('#dash-grid').innerHTML = r.ind.map((ind) => OS.cardIndicador(ind, qs)).join('');
   }
-  per.addEventListener('change', () => OS.transicao(desenhar));
-  prof.addEventListener('change', () => OS.transicao(desenhar));
+  per.addEventListener('change', desenhar); prof.addEventListener('change', desenhar);
   desenhar();
 })();

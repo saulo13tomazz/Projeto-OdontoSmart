@@ -52,30 +52,9 @@
     OS.qs('#app-menu').innerHTML = `<div class="menu-title">Menu</div><ul>` +
       MENU.map(([k, href, nome]) => `<li><button type="button" class="nav-btn${k === chave ? ' active' : ''}" ${k === chave ? 'aria-current="page"' : ''} data-href="${href}">${ICON[k] || ''}<span>${nome}</span></button></li>`).join('') +
       `</ul><div class="menu-foot"><strong>${OS.esc(ine.equipe)}</strong>INE ${OS.esc(ine.ine)} · ${ine.cargaHoraria}h semanais</div>`;
-    OS.qsa('#app-menu .nav-btn').forEach((btn) => btn.addEventListener('click', () => {
-      if (btn.classList.contains('active') && location.pathname.endsWith('/' + btn.dataset.href)) return;
-      OS.navegar(btn.dataset.href);
-    }));
+    OS.qsa('#app-menu .nav-btn').forEach((btn) => btn.addEventListener('click', () => { location.href = btn.dataset.href; }));
     OS.qs('#app-footer').innerHTML = '<footer>OdontoSmart © 2026 · Gestão de Indicadores de Saúde Bucal</footer>';
-    OS.qs('#trocar-perfil').addEventListener('click', (e) => {
-      e.preventDefault();
-      OS.sessao.limpar();
-      OS.navegar('login.html');
-    });
-
-    /* Intercepta links internos (<a href="...">) para aplicar transição suave entre telas */
-    if (!OS._navBound && typeof document !== 'undefined' && document.addEventListener) {
-      OS._navBound = true;
-      document.addEventListener('click', (e) => {
-        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-        if (!a || a.target || a.hasAttribute('download')) return;
-        const href = a.getAttribute('href');
-        if (!href || href.startsWith('#') || href.startsWith('javascript:') || /^https?:/i.test(href)) return;
-        e.preventDefault();
-        OS.navegar(href);
-      });
-    }
+    OS.qs('#trocar-perfil').addEventListener('click', () => OS.sessao.limpar());
     return u;
   };
 })();
